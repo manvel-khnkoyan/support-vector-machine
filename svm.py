@@ -170,10 +170,10 @@ def coordinate_descent(dataset, alfa, precision, delta, Q, type ):
     while go:
         go = False
         for index, value in enumerate(dataset):
-            # detecting direction dirst / up or down
+            # detecting direction which direction cause rising of lagrangian
             direction = detect_maximum_direction(dataset, alfa, index, delta, type, Q)
             next = get_lagrangian(dataset, alfa, type, Q)
-            # changing alfa[index] till lagrangian will be maximum
+            # changing alfa[index] till lagrangian will get maximum
             while True:
                 prev = next
                 change_alfa(dataset, alfa, index, direction * delta)
