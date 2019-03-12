@@ -1,7 +1,6 @@
 
-## Support Vector Machine
 
-**From Theory To Practice**
+**SVM: From Theory To Practice**
 
 In this article we are going to create simple support vector machine without deep analyze.
 
@@ -129,12 +128,29 @@ Having support vectors we can easily analyze any complex data.
 When we have non line data separatable, in this case we are doing some trick - instead of calculating support vectors dot product, we change it with some function.
 In my example I use radial basis function (RBF) :
 
-> exp(-Q*||**x1** - **x2**||) 
+> exp(-Q * || **x1** - **x2** ||) 
 
-or
+(where Q is some constant) or :  
 ```python
 math.exp(-Q*(x1**2 + x2**2))
 ``` 
 
 
 ***Results***
+
+As as test I generated about 100 random points with liner and paraboloid (non liner) seperation. 
+Then generated random 20 points and tested them. To show result I used matplotlib.
+
+To test yourself - clone the project and run in your terminal `python3 predict_liner.py` to see result liner svm or `python3 predict_nonliner.py`  to see non liner result.
+
+Example 1: Liner SVM
+
+<img src="{{site.url}}/img/liner.png"> 
+
+Example 2: Non Liner SVM 
+
+<img src="{{site.url}}/img/nonliner.png"> 
+
+where
+
+<img src="{{site.url}}/img/description.png">
