@@ -1,1 +1,7 @@
 theme: jekyll-theme-minimal
+title: Support Vector Machine
+show_downloads: true
+future: true
+use_logo: true
+logo: img/liner.png
+github_button_location_top_navbar: true
