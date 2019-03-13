@@ -145,12 +145,12 @@ To test yourself - clone the project and run in your terminal `python3 predict_l
 
 Example 1: Liner SVM
 
-<img src="{{site.url}}/img/liner.png"> 
+<img src="img/liner.png"> 
 
 Example 2: Non Liner SVM 
 
-<img src="{{site.url}}/img/nonliner.png"> 
+<img src="img/nonliner.png"> 
 
 where
 
-<img src="{{site.url}}/img/description.png">
+<img src="img/description.png">
