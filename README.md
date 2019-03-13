@@ -128,7 +128,7 @@ Having support vectors we can easily analyze any complex data.
 When we have non line data separatable, in this case we are doing some trick - instead of calculating support vectors dot product, we change it with some function.
 In my example I use radial basis function (RBF) :
 
-> exp(-Q * || **x1** - **x2** ||) 
+> exp(-Q * ∥	 **x1** - **x2** ∥	) 
 
 (where Q is some constant) or :  
 ```python
