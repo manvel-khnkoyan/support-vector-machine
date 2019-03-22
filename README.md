@@ -2,7 +2,7 @@
 
 **SVM: From Theory To Practice**
 
-In this article we are going to create simple support vector machine without deep analyze.
+In this article we are going to create simple support vector machine without deep analyze, written in pure python.
 
 
 ***Liner SVM***
@@ -10,44 +10,21 @@ In this article we are going to create simple support vector machine without dee
 
 As we know, the purpose of the SVM is to search for the hyperline, which will be the best separation between two different types:
 
-Shorter we need to find linear equation
 
-> a x + b y + c = 0
-
-or in multi deministion space:
-
-> a1 x1 + a2 x2 + .... + b  = 0
-
-or shorter 
-
-> **w** **x** + b = 0
-  
-lets define 1 for one type  
-> **w** **x** + b = 1
-
-lets define -1 for another type  
-> **w****x** + b = -1
-
-or in general:
-> yi ( **w** **x** + b ) >= 0
+According support vector machine therory we come on lagrangian equations: 
 
 
-
-According support vector machine therory we come on lagrangian equations: (for more details there many documentation you can get from internet)
-
-> Sum(i) ( ai ) - 0.5 * Sum(i,j) ( ai aj yi yj <**xi** **xj**> )
-
-> Sum(i) (ai yi) = 0
-
-where to whether 1 or -1 depend on type
+<img src="img/lagrangian.png" width="250px"> 
 
 
-Maximising this equation as a optimisation problem. So we have "y" and "**x**" and our purpose is find "a".
+Which is known as the “optimization problem”. Where we already have "y" and "**x**", our goal is find **α**.
 
 
 There are many methods to find these variables, but my solution is solve it analytically according coordinate descent algorithm.
-The purpose of this algorithm is change each ai element till lagrangian showed above will reach maximum. But don't forget that sum of ai * yi should be 0.
+The purpose of this algorithm is change each **α** till lagrangian will reach his maximum, in the other hand keeping sum of **α** and **y** - zero.
 
+
+Code example:
 
 ```python
 
@@ -71,10 +48,8 @@ def coordinate_descent(dataset, alfa, precision, delta, Q, type ):
 
 ``` 
 
-In this function we find "a" -s (in code it is "alfa"), looping over each "a" till we get in maximum of lagrangian. (for more details look up code)
 
-
-Having "a"-s we easyly can find hypreline :
+Having **α** we easyly can find hypreline :
 
 weight: **w** = Sum(i) ai yi **xi**  
 basis: b - avg( <**x** **w**>  )
@@ -85,15 +60,15 @@ now you can do prediction
 > Sign( **w** **x** + b) 
 
 or
-> Sign( Sum(i)( ai yi <**x**  **x_test**> ) + b )
+> Sign( Sum(i)( αi yi <**x**  **x_test**> ) + b )
 
-So having "a" -s you can build a hyperline and make a prediction
+So having **α** you can build a hyperline and make a prediction
 
 
 ***Finding Support Vectors***
 
-The example we discussed supposed that we have only few vectors to analyze. But when the number of input vectors are high, "coordinate_descent" function can't find "a" because of hard work.
-(remember that "a" is find analytically)
+The example we discussed supposed that we have only few vectors to analyze. But when the number of input vectors are high, "coordinate_descent" function can't find *α* because of hard work.
+(remember that **α** is find analytically)
 
 According lagrangian equations, function gets his maximum when we to take into account only those opposite vectors which distance is minimum.
 So we can just filter given vectors and name theme support vectors, and process only these vectors instead of all.
@@ -128,9 +103,10 @@ Having support vectors we can easily analyze any complex data.
 When we have non line data separatable, in this case we are doing some trick - instead of calculating support vectors dot product, we change it with some function.
 In my example I use radial basis function (RBF) :
 
-> exp(-Q * ∥	 **x1** - **x2** ∥	) 
+> exp(-Q * ∥ **x1** - **x2** ∥) 
 
-(where Q is some constant) or :  
+(where Q is some adjustable constant) or :  
+
 ```python
 math.exp(-Q*(x1**2 + x2**2))
 ``` 
