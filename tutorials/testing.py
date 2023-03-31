@@ -1,10 +1,9 @@
 
 import sys
 import math
-sys.path.append('../src/')
+sys.path.append('src/')
 
 from SVM import SVM 
-from Vector import Vector
 
 if __name__ == "__main__":
 

@@ -1,184 +1,245 @@
 
 
-### SVM: From Theory To Practice
+# Support Vector Machine: From Theory to Practice
 
-In this article, we are going to create a simple support vector machine using only pure Python code.
+In this article, we are going to create a simple support vector machine using only pure Python code,
+but before demonstrating the Python code, let's understand what SMV is and how it works.
 
-####  What is support vector machine
+####  What is Support Vector Machine (SVM)
 
-It is the learning model for determining the point to which a pattern belongs:
+Support Vector Machine (SVM) is a supervised learning algorithm that can be used for classification or regression tasks. SVM aims to find an optimal separating hyperplane that maximizes the margin between different classes in the feature space. The margin is defined as the distance between the nearest points of different classes, called support vectors. In essence, SVM searches for the decision boundary that provides the largest separation between classes.
 
-We can start with an easy linear pattern:
+Mathematically, let's say we have a dataset of n samples with m features, represented as:
 
-####  Liner SVM
+{(x₁, y₁), (x₂, y₂), ..., (xₙ, yₙ)}
 
-The liner support machine is a primitive pattern separated by a line: where one side of the line belongs to one pattern, and the other side to another.
-The goal of Linear SVM is to find a linear equation, by given points; then predict in which side the future points fall into.
+where xᵢ ∈ Rᵐ (feature vector) and yᵢ ∈ {-1, +1} (class label).
 
-<img src="docs/img/svm_margin.png" width="200px" style="margin: 20px" /> 
+The goal is to find a hyperplane defined by the equation:
 
-Suppose we are given a training dataset of **n** points of the form
+w • x + b = 0
 
-<img src="docs/img/xyn.svg" /> 
+where w ∈ Rᵐ (weight vector) and b ∈ R (bias term).
 
-where the <img src="docs/img/yi.svg" /> are either 1 or −1, each indicating the class to which the point <img src="docs/img/xi.svg" style="height: 14px" /> belongs. Each <img src="docs/img/xi.svg" /> p-dimensional real vector. We want to find the "maximum-margin hyperplane" that divides the group of points <img src="docs/img/xi.svg" /> for which <img src="docs/img/yie+1.svg" /> from the group of points for which <img src="docs/img/yie-1.svg" />, which is defined so that the distance between the hyperplane and the nearest point <img src="docs/img/xi.svg" /> from either group is maximized.
+The SVM algorithm is also capable of handling non-linear classification problems using a technique called the "Kernel Trick."
 
-<img src="docs/img/linear-eq.svg" width="100px" /> 
 
-Where **w** is the weight vector
+#### How to find hyperplane for linear classification
+
+The linear support vector machine is a basic classifier separated by a line: one side of the line belongs to one class, and the other side to another. The goal of Linear SVM is to find a linear equation, given a set of points, and then predict which side of the line future points will fall into.
+
+<img src="docs/img/img1.png" style="margin: 15px"  height="190px" /> 
+
 
 In this article, we are not going to calculate the equation, but you can find the full solutions here: https://en.wikipedia.org/wiki/Support_vector_machine or https://web.mit.edu/6.034/wwwbob/svm-notes-long-08.pdf
 
-Where the final result of the equation falls into these dual equations:
 
-<img src="docs/img/equation.png" height="110px" style="margin: 10px"/> 
+To find the optimal w and b, we can use the Lagrange duality method to obtain the dual form of the optimization problem:
 
-Where (**x**i * **x**j) is a dot product:
-which is the final equation for finding the linear weight. And this is the equation we are going to solve to find the independent **a** numbers for each point: where **w** weight is:
+<img src="docs/img/img3.svg" />   
 
-<img src="docs/img/svm_weight.png" height="72px" style="margin: 5px"/> 
+subject to:
 
-So, knowing all the independent **a** numbers, we can find the weight (**w**), therefore, we can find the linear function:
+<img src="docs/img/img4.svg" /> 
 
-<img src="docs/img/svm_common.png" height="52px" style="margin: 5px"/> 
+where α is the Lagrange multiplier, yi is the class label of the ith data point, and <xi, xj> is the dot product of the ith and jth feature vectors.
 
-Knowing the linear function, we can easily determine the classification of points, on which side of the line the points are located.
-The last variable that is not yet known is the basis **b**, which we will get after the next paragraph:
+Once we have obtained the optimal values of α, we can compute w and b using the following equations:
 
-#### Support Vector
+<img src="docs/img/img5.svg" />
 
-Instead of counting all points, we can go for a trick and optimize, instead of counting all points, we take only the nearest opposite vectors to each other, and delete the rest in the calculation, because they do not affect the result (we want to find the boundaries between the patterns). These vectors are called **support vectors**
+<img src="docs/img/img6.svg" />
 
-<img src="docs/img/support-vectors.jpg" height="180px" style="margin: 10px"/> 
-
-Thus, the solution of the problem is also reduced to the search for support vectors.
-Now, having the support vectors, we will get the base of all support vectors, then we will take the average, which will be the base **b** of the hyperline.
+where xi is a support vector (i.e., a data point that lies on the margin or misclassified).
 
 
-#### Non Liner SVM
+#### Non-linear classification: Kernel trick
+
+In many real-world problems, the data is not linearly separable in the original feature space. In such cases, SVM can still be used for classification by mapping the input data to a higher-dimensional space where it becomes linearly separable. This mapping is performed using a kernel function. The kernel trick allows us to perform these transformations implicitly, without actually computing the coordinates of the data in the higher-dimensional space.
+
+A kernel function K(xᵢ, xⱼ) computes the inner product of the transformed vectors, without explicitly computing the transformation ϕ(x):
+
+<img src="docs/img/img8.svg" />
+
+Using the kernel trick, the dual problem in the Lagrangian formulation can be rewritten as:
+
+<img src="docs/img/img9.svg" height="150px"/>
+
+##### Popular kernel functions include:
+
+Polynomial (homogeneous): d=1, this becomes the linear kernel.
+
+<img src="docs/img/img10.svg" />
+
+Polynomial kernel (where γ, r, and d are kernel parameters)
+
+<img src="docs/img/img11.svg" />
+
+Radial basis function (RBF) kernel or Gaussian kernel (where γ is a kernel parameter)
+
+<img src="docs/img/img12.svg" />
+
+Sigmoid kernel (where γ and r are kernel parameters)
+
+<img src="docs/img/img13.svg" />
+
+Once the optimal α values are obtained using one of the kernel functions, the decision function can be expressed as:
+
+<img src="docs/img/img15.png" height="40px" />
+
+The kernel trick allows SVM to learn non-linear decision boundaries, which makes it a powerful and versatile classification algorithm for a wide range of problems.
 
 
-#### Coordinate descent
+#### Gradient descent algorithm
+
+Gradient descent is a general optimization algorithm that can be used to find optimal parameters, such as α values (Lagrange multipliers) in SVM.
+
+Using gradient descent in the context of SVM, consider the following steps:
+
+* Initialize the α values: Begin with an initial set of α values, commonly αᵢ = 0 for i = 1, 2, ..., n.
+* Replace each αᵢ with small portions to satisfy the dual equation - thus find optimal αᵢ
+
+#### Support Vectors
+
+Support vectors are the data points that are closest to this decision boundary, and they essentially "support" the position and orientation of the hyperplane.
+
+Once we have the support vectors, it will be easier to use just the support vectors to predict future points instead of counting whole data points.
+
+Support vectors are determined after training the SVM model using coordinate descent. Once the optimal values for the Lagrange multipliers (alphas) are obtained, support vectors are identified by checking if the alpha value for a data point lies between 0 and the regularization parameter C. If so, the data point is considered a support vector
+
+------------------------------
+
+## SVM Implementation in Python
+
+The provided code is a simple implementation of a Support Vector Machine (SVM) in Python. We will go through each part of 
+the code step by step.
 
 
+##### Define multidimensional vector
 
---------------
-According support vector machine therory we come on lagrangian equations: 
-
-
-<img src="img/lagrangian.png" width="250px"> 
-
-
-Which is known as the “optimization problem”. Where we already have "y" and "**x**", our goal is find **α**.
-
-
-There are many methods to find these variables, but my solution is solve it analytically according coordinate descent algorithm.
-The purpose of this algorithm is change each **α** till lagrangian will reach his maximum, in the other hand keeping sum of **α** and **y** - zero.
-
-
-Code example:
-
-```python
-
-def coordinate_descent(dataset, alfa, precision, delta, Q, type ):
-    go = True
-    while go:
-        go = False
-        for index, value in enumerate(dataset):
-            # detecting direction which direction cause rising of lagrangian 
-            direction = detect_maximum_direction(dataset, alfa, index, delta, type, Q)
-            next = get_lagrangian(dataset, alfa, type, Q)
-            # changing alfa[index] till lagrangian will get maximum
-            while True:
-                prev = next
-                change_alfa(dataset, alfa, index, direction * delta)
-                next = get_lagrangian(dataset, alfa, type, Q)
-                if (next - prev) < precision:
-                    break
-                go = True
-    return alfa
-
-``` 
-
-
-Having **α** we easyly can find hypreline :
-
-weight: **w** = Sum(i) ai yi **xi**  
-basis: b - avg( <**x** **w**>  )
-
-
-now you can do prediction 
-
-> Sign( **w** **x** + b) 
-
-or
-> Sign( Sum(i)( αi yi <**x**  **x_test**> ) + b )
-
-So having **α** you can build a hyperline and make a prediction
-
-
-***Finding Support Vectors***
-
-The example we discussed supposed that we have only few vectors to analyze. But when the number of input vectors are high, "coordinate_descent" function can't find *α* because of hard work.
-(remember that **α** is find analytically)
-
-According lagrangian equations, function gets his maximum when we to take into account only those opposite vectors which distance is minimum.
-So we can just filter given vectors and name theme support vectors, and process only these vectors instead of all.
-
-
-Here are code how I did it
+In the beginning, let's create a sample multidimensional vector with the **dot** (dot product) and **distance** properties
 
 ```python
-def find_support_vectors(dataset, C=0.5, slack=0.5):
-    distances = {}
-    for i,v1 in enumerate(dataset):
-        for j,v2 in enumerate(dataset):
-            if i != j and v1[2] != v2[2]:
-                distance = math.sqrt((v1[0] - v2[0])**2 + (v1[1] - v2[1])**2)
-                if i not in distances or distance < distances[i]:
-                    distances[i] = distance
-
-    support_vectors = []
-    for index,vector in enumerate(dataset):
-        distance = distances[index]
-        if distance > C - slack and distance < C + slack:
-            support_vectors.append(vector)
-    return support_vectors
+class Vector:
+    def __init__(self, coordinates):
+        ...
+    def dot(self, other):
+        ...
+    def distance(self, other):
+        ...
 ```
 
-Having support vectors we can easily analyze any complex data.
+##### Define the SVM class
 
-
-
-***Kernel Trick***
-
-When we have non line data separatable, in this case we are doing some trick - instead of calculating support vectors dot product, we change it with some function.
-In my example I use radial basis function (RBF) :
-
-> exp(-Q * ∥ **x1** - **x2** ∥) 
-
-(where Q is some adjustable constant) or :  
+Then, defining SVM class with an initializer, several methods for training, and methods for predicting new data points.
 
 ```python
-math.exp(-Q*(x1**2 + x2**2))
-``` 
+class SVM:
+    def __init__(self, C=1.0, kernel=None):
+        self.C = C
+        self.data = None
+        self.y = None
+        self.alpha = None
+        self.bias = 0
+        self.kernel = kernel
+
+        self.s_v = [] # support vectors
+        self.s_y = [] # support vectors labels
+        self.s_a = [] # support vectors alphas
+```
 
 
-***Results***
+The **\_\_init\_\_** method initializes the SVM with the following attributes:
 
-As as test I generated about 100 random points with liner and paraboloid (non liner) seperation. 
-Then generated random 20 points and tested them. To show result I used matplotlib.
+- C: The regularization parameter.
+- data: The training data.
+- y: The labels for the training data.
+- alpha: The Lagrange multipliers for the SVM optimization problem.
+- bias: The bias term of the decision function.
+- kernel: The kernel function used for non-linear SVM.
+- s_v, s_y, s_a: Lists to store support vectors, their labels, and their corresponding alpha values.
 
-To test yourself - clone the project and run in your terminal `python3 predict_liner.py` to see result liner svm or `python3 predict_nonliner.py`  to see non liner result.
 
-Example 1: Liner SVM
+##### The Lagrangian function
 
-<img src="img/liner.png"> 
+The **lagrangian** method calculates the Lagrangian function value for the given data:
 
-Example 2: Non Liner SVM 
+```python
+def lagrangian(self, data):
+    n = len(self.alpha)
+    return sum(self.alpha) - 0.5 * sum(self.alpha[i] *self.alpha[j] * self.y[i] * self.y[j] * self.kernel(data[i], data[j]) for i in range(n) for j in range(n))
+```
 
-<img src="img/nonliner.png"> 
+##### Fit the SVM model
 
-where
+The **fit** method trains the SVM model on the provided data:
 
-<img src="img/description.png">
+```python
+def fit(self, data, iterations=1000, step=0.01):
+    ...
+```
+
+This method performs the following steps:
+
+- Initialize the data, labels, and alpha values.
+- Train the SVM using coordinate descent.
+- Find support vectors and their corresponding alpha values.
+- Calculate the bias term.
+
+
+##### The decision function
+
+The **decision_function** method calculates the decision function value for a given input vector **x**:
+
+```python
+def decision_function(self, x):
+    return sum(alpha_i * y_i * self.kernel(x_i, x) for alpha_i, y_i, x_i in zip(self.s_a, self.s_y, self.s_v)) + self.bias
+```
+
+##### Predict the class for a new sample
+
+The **predict** method classifies a new data point **x** using the trained SVM model:
+
+```python
+def predict(self, x):
+    return 1 if self.decision_function(Vector(x)) > 0 else -1
+```
+
+This method returns 1 if the decision function value is greater than 0, and -1 otherwise.
+
+
+### Tutorials
+
+Examples of code you can find in the tutorials folder, where there are give to examples of linear and nonlinear classifications:
+
+
+To run examples, first, install the **numpy** and **matplotlib** packages to run examples:
+
+```bash
+pip3 install -r requirements.txt
+```
+
+Then try running the Python examples to see the results below:
+
+
+##### Examples 1: Linear classification example
+
+```bash
+python3 tutorials/linear.py 
+```
+<img src="docs/img/img16.png" height="300px" /> 
+
+##### Examples 2: None-Linear classification example
+
+```bash
+python3 tutorials/linear.py 
+```
+<img src="docs/img/img17.png" height="300px" /> 
+
+Where the blue and red circles are the initial data points for the different classifications. So you can see the split with SVM with different backgrounds.
+
+And the crosses are data points predicted by SVM with different colors according to the classification.
+
+-------
+
+The above examples demonstrate the implementation and usage of a simple Support Vector Machine in Python. In practice, you might also consider using libraries like scikit-learn for more advanced and efficient SVM implementations. However, this custom implementation can be useful for understanding the core concepts and mechanics behind SVM.
