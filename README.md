@@ -232,7 +232,7 @@ python3 tutorials/linear.py
 ##### Examples 2: None-Linear classification example
 
 ```bash
-python3 tutorials/linear.py 
+python3 tutorials/none-linear.py 
 ```
 <img src="docs/img/img17.png" height="300px" /> 
 
